@@ -93,7 +93,13 @@ class Game extends React.Component {
       const description = move
         ? `Go to move #${move} (${historyLocation[move-1].row}, ${historyLocation[move-1].col})`
         : 'Go to game start';
-      return (
+      return move === this.state.stepNumber
+      ? (
+        <li key={move}>
+          <button onClick={() => this.jumpTo(move)}><strong>{description}</strong></button>
+        </li>
+      )
+      : (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{description}</button>
         </li>
