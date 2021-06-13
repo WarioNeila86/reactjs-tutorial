@@ -50,6 +50,7 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null)
       }],
+      historyLocation: Array(9).fill(null),
       stepNumber: 0,
       xIsNext: true
     };
@@ -57,6 +58,9 @@ class Game extends React.Component {
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const movement = calculatePosition(i);
+    const historyLocation = this.state.historyLocation;
+    historyLocation[this.state.stepNumber] = movement;
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     // ignore a click if someone has won the game or if a Square is already filled
@@ -66,6 +70,7 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       history: history.concat([{ squares }]),
+      historyLocation,
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
     });
@@ -80,12 +85,13 @@ class Game extends React.Component {
 
   render() {
     const history = this.state.history;
+    const historyLocation = this.state.historyLocation;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
       const description = move
-        ? `Go to move #${move}`
+        ? `Go to move #${move} (${historyLocation[move-1].row}, ${historyLocation[move-1].col})`
         : 'Go to game start';
       return (
         <li key={move}>
@@ -132,6 +138,31 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function calculatePosition(index) {
+  switch (index) {
+    case 0:
+      return {col: 1, row: 1};
+    case 1:
+      return {col: 2, row: 1};
+    case 2:
+      return {col: 3, row: 1};
+    case 3:
+      return {col: 1, row: 2};
+    case 4:
+      return {col: 2, row: 2};
+    case 5:
+      return {col: 3, row: 2};
+    case 6:
+      return {col: 1, row: 3};
+    case 7:
+      return {col: 2, row: 3};
+    case 8:
+      return {col: 3, row: 3};
+    default:
+      throw new Error('Unexpected index!!!');
+  }
 }
 
 // ========================================
