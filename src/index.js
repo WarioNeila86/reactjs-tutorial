@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Toggle } from './components/Toggle';
 import './index.css';
 
 function Square(props) {
@@ -10,7 +11,7 @@ function Square(props) {
   );
 }
 
-class Board extends React.Component {
+class Board extends Component {
   renderSquare(i) {
     return (
       <Square
@@ -41,7 +42,7 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
+class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,7 +51,8 @@ class Game extends React.Component {
       }],
       historyLocation: Array(9).fill(null),
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      descendingOrder: false
     };
   }
 
@@ -71,6 +73,12 @@ class Game extends React.Component {
       historyLocation,
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
+    });
+  }
+
+  handleToggle() {
+    this.setState({
+      descendingOrder: !this.state.descendingOrder
     });
   }
 
@@ -104,6 +112,10 @@ class Game extends React.Component {
         );
     });
 
+    const { descendingOrder } = this.state;
+    if (descendingOrder) {
+      moves.reverse();
+    }
 
     const status = winner ? `Winner: ${winner}` : `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
 
@@ -117,6 +129,11 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <br></br>
+          <Toggle
+            descendingOrder={descendingOrder}
+            onClick={() => this.handleToggle()}
+          />
           <ol>{moves}</ol>
         </div>
       </div>
