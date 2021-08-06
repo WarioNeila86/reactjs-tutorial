@@ -79,7 +79,12 @@ class Game extends Component {
     }
 
     const { winner, winnerPositions } = calculateWinner(current.squares) || {};
-    const status = winner ? `Winner: ${winner}` : `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
+    const isLastMovement = !current.squares.includes(null);
+    const status = winner
+      ? `Winner: ${winner}`
+      : isLastMovement
+        ? 'No one wins'
+        : `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
 
     return (
       <div className="game">
