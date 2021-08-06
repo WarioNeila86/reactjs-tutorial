@@ -55,7 +55,6 @@ class Game extends Component {
     const history = this.state.history;
     const historyLocation = this.state.historyLocation;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
       const description = move
@@ -79,12 +78,14 @@ class Game extends Component {
       moves.reverse();
     }
 
+    const { winner, winnerPositions } = calculateWinner(current.squares) || {};
     const status = winner ? `Winner: ${winner}` : `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
 
     return (
       <div className="game">
         <div className="game-board">
           <Board
+            winnerPositions={winnerPositions}
             squares={current.squares}
             onClick={i => this.handleClick(i)}
           />
@@ -103,6 +104,13 @@ class Game extends Component {
   }
 }
 
+/**
+ * Calculates if someone has won the game
+ * Returns an object with the winner and the squares that caused the win
+ *
+ * @param {?string[]} squares - list of squares from current game
+ * @returns {{winner: string, winnerPositions: number[]}|null}
+ */
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -117,7 +125,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return { winner: squares[a], winnerPositions: [a, b, c] };
     }
   }
   return null;
