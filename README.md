@@ -18,5 +18,12 @@ Among the functionalities of the game:
 * Install project dependencies by running `npm install`
 
 
-## How to execute the app:
+## How to execute the app
 * Start the app: `npm start`
+
+
+## How it looks like
+<br />
+<p align="center">
+  <img width="432" height="437" src="https://user-images.githubusercontent.com/6084473/128579727-818769e2-b6ca-4451-8679-4f81186ce24f.gif">
+</p>
